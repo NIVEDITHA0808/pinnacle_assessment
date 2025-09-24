@@ -41,7 +41,6 @@ A real-time AI-powered chat application with audio support, built using Google's
 1. Clone the repository:
    ```
    git clone <repository-url>
-   cd pi_assignment-main
    ```
 
 2. Set up the virtual environment:
@@ -127,3 +126,4 @@ This project is for educational/demonstration purposes. Please check with the or
 - **Database Errors**: Ensure `retrieval_data.db` exists and is populated.
 
 For more help, refer to the code comments or open an issue.
+
