@@ -1,4 +1,4 @@
-# Pi Assignment Main - AI-Powered Real-Time Chat Application
+# AI-Powered Real-Time Chat Application
 
 A real-time AI-powered chat application with audio support, built using Google's Gemini Live API and the Agent Development Kit (ADK). This project serves as a Chevrolet dealership assistant that can handle voice and text interactions with retrieval-augmented generation (RAG) for context-aware responses.
 
@@ -127,5 +127,6 @@ This project is for educational/demonstration purposes. Please check with the or
 
 For more help, refer to the code comments or open an issue.
 Note: The code is customised verison of Audio Bidirectional streaming in google ADK documentation: https://google.github.io/adk-docs/streaming/custom-streaming-ws/#next-steps-for-production
+
 
 
