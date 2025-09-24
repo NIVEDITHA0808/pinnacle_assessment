@@ -1,0 +1,16 @@
+# Core dependencies for pi_assignment-main
+fastapi==0.104.1
+uvicorn==0.24.0  # For running FastAPI
+websockets==12.0
+quart==0.19.4
+gtts==2.4.0
+python-dotenv==1.0.0
+
+# Google AI libraries
+google-genai==1.0.0  # Adjust version as needed
+google-adk==1.0.0    # Adjust version as needed
+
+# Additional utilities
+asyncio  # Built-in, but for reference
+json     # Built-in
+base64   # Built-in
