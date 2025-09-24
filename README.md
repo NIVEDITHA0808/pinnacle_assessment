@@ -33,7 +33,7 @@ A real-time AI-powered chat application with audio support, built using Google's
 ## Setup Instructions
 
 ### Prerequisites
-- Python 3.9+
+- Python 3.11+
 - Node.js (for client-side development, optional)
 - Google Cloud API key with access to Gemini Live
 
@@ -126,4 +126,6 @@ This project is for educational/demonstration purposes. Please check with the or
 - **Database Errors**: Ensure `retrieval_data.db` exists and is populated.
 
 For more help, refer to the code comments or open an issue.
+Note: The code is customised verison of Audio Bidirectional streaming in google ADK documentation: https://google.github.io/adk-docs/streaming/custom-streaming-ws/#next-steps-for-production
+
 
