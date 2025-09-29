@@ -1,5 +1,4 @@
 """common utils file"""
-# pylint: disable=too-many-positional-arguments
 import inspect
 from datetime import datetime, timezone, timedelta
 from enum import Enum
@@ -210,4 +209,5 @@ def get_from_cache(cache_key: str):
 
 def add_to_cache(key: str, value):
     """Store in cache with current timestamp"""
+
     CACHE[key] = (value, datetime.now(timezone.utc))
