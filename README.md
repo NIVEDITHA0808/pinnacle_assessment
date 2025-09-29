@@ -42,7 +42,7 @@ This application demonstrates a conversational AI assistant that can handle both
 
 1. **Clone the repository** (if applicable) and navigate to the app directory:
    ```bash
-   git clone 
+   git clone https://github.com/NIVEDITHA0808/pinnacle_assessment.git
    ```
 
 2. **Install dependencies**:
@@ -136,3 +136,4 @@ app/
 ## License
 
 Copyright 2025 Google LLC. Licensed under the Apache License, Version 2.0.
+
