@@ -16,7 +16,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from google_search_agent.agent import root_agent
+from voice_agent.agent import root_agent
 
 # Load Gemini API Key
 load_dotenv()
@@ -140,3 +140,4 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int, is_audio: str):
     finally:
         live_request_queue.close()
         print(f"Client #{user_id} disconnected and cleaned up")
+
