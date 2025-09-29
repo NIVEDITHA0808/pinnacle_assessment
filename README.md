@@ -1,132 +1,138 @@
-# AI-Powered Real-Time Chat Application
+# Stevens Creek Chevrolet Voice Assistant
 
-A real-time AI-powered chat application with audio support, built using Google's Gemini Live API and the Agent Development Kit (ADK). This project serves as a Chevrolet dealership assistant that can handle voice and text interactions with retrieval-augmented generation (RAG) for context-aware responses.
+A real-time streaming voice assistant for Stevens Creek Chevrolet dealership built with Google's Agent Development Kit (ADK), FastAPI, and WebSockets.
+
+## Overview
+
+This application demonstrates a conversational AI assistant that can handle both text and audio interactions. The assistant, named "Stevy", provides information about vehicle sales specials, service offers, EV incentives, and vehicle inventory by scraping real-time data from the dealership's website.
 
 ## Features
 
-- **Real-Time Voice and Text Chat**: Bidirectional WebSocket communication for live interactions
-- **AI Agent Integration**: Powered by Google's Gemini Live model for intelligent responses
-- **Audio Processing**: Real-time audio recording and playback using Web Audio API
-- **Retrieval-Augmented Generation (RAG)**: Context-aware responses using a SQLite database for dealership information
-- **Web-Based UI**: Simple, responsive interface with chat logs and controls
-- **Session Management**: Support for multiple user sessions with proper lifecycle handling
+- **Real-time Streaming**: Supports both text and audio modalities for natural conversation
+- **WebSocket Communication**: Bidirectional real-time communication between client and server
+- **Tool Integration**: Uses custom tools to fetch live data from stevenscreekchevy.com
+- **Audio Processing**: Records and plays back audio using Web Audio API
+- **Session Management**: Maintains conversation context per user session
 
 ## Architecture
 
-### Backend
-- **main.py**: FastAPI WebSocket server handling real-time agent sessions
-- **server/agent.py**: Defines the AI agent using Google's ADK with RAG context
-- **server/rag.py**: Keyword-based retrieval system using SQLite database
-- **server/prompt.py**: System prompt defining the AI's role as a dealership assistant
-- **server/app.py**: Alternative Quart-based server (legacy)
+### Backend (FastAPI)
+- **main.py**: FastAPI server with WebSocket endpoint `/ws/{user_id}`
+- **Agent**: Powered by Google's Gemini 2.0 Flash Live model
+- **Tools**: Web scraping tools for dealership data
+- **Session Handling**: Uses ADK's InMemoryRunner for live agent sessions
 
 ### Frontend
-- **client/index.html**: Main UI with chat interface and controls
-- **client/main.js**: Core client logic for WebSocket, audio, and UI management
-- **client/api-client.js**: WebSocket communication handler
-- **client/audio-player.js** and **audio-recorder.js**: Audio processing worklets
+- **index.html**: Simple web interface with chat display and input controls
+- **app.js**: WebSocket client with audio recording/playback capabilities
+- **Audio Worklets**: Custom audio processing for real-time streaming
 
-### Data
-- **retrieval_data.db**: SQLite database for RAG context
-- **.env**: Environment variables for API keys and configuration
+### Agent Components
+- **voice_agent/agent.py**: Agent definition with model and tools
+- **voice_agent/prompt.py**: System instructions for the assistant's behavior
+- **voice_agent/tools/tools.py**: Web scraping tools using BeautifulSoup
 
-## Setup Instructions
+## Prerequisites
 
-### Prerequisites
 - Python 3.11+
-- Node.js (for client-side development, optional)
-- Google Cloud API key with access to Gemini Live
+- Google Cloud API key with access to Gemini models
+- Internet connection for web scraping
 
-### Installation
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   ```
+## Setup
 
-2. Set up the virtual environment:
-   ```
-   python -m venv myenv
-   myenv/Scripts/activate  # On Windows
-   # source myenv/bin/activate  # On macOS/Linux
+1. **Clone the repository** (if applicable) and navigate to the app directory:
+   ```bash
+   git clone 
    ```
 
-3. Install Python dependencies:
-   ```
+2. **Install dependencies**:
+   ```bash
    pip install -r requirements.txt
    ```
 
-4. Set up environment variables:
-   Create a `.env` file in the root directory with:
-   ```
-   APP_NAME=your-app-name
-   AGENT_VOICE=your-voice-name
-   AGENT_LANGUAGE=en-US
-   # Add your Google API key and other required variables
+3. **Configure environment**:
+   - Copy `.env` and set your Google API key:
+     ```
+     GOOGLE_API_KEY=your_api_key_here
+     ```
+
+4. **Run the application**:
+   ```bash
+   uvicorn main:app --reload
    ```
 
-5. Initialize the database:
-   ```
-   # Run any setup scripts if available, or populate retrieval_data.db manually
-   ```
-
-### Running the Application
-1. Start the server:
-   ```
-   python main.py
-   ```
-   The server will run on `http://localhost:8080` by default.
-
-2. Open the client:
-   Open `client/index.html` in a web browser.
-
-3. Interact with the AI:
-   - Click "Start Session" to begin
-   - Use the microphone button for voice input
-   - View real-time chat and logs
+5. **Open in browser**:
+   - Navigate to `http://localhost:8000`
+   - Click "🎤 Start Audio" to enable voice mode
+   - Type messages or speak to interact with the assistant
 
 ## Usage
 
-- **Starting a Session**: Click the "Start Session" button to initiate a WebSocket connection and agent session.
-- **Voice Input**: Use the microphone to send audio, which is transcribed and processed by the AI.
-- **Text Input**: Send text messages directly via the WebSocket.
-- **RAG Context**: The AI uses retrieval data from the database to provide informed responses about dealership services.
+### Text Mode
+- Type messages in the input field and press Send
+- The assistant will respond with text in real-time
 
-## Dependencies
+### Audio Mode
+- Click "🎤 Start Audio" to enable microphone access
+- Speak naturally - audio is streamed in 200ms chunks
+- Responses are played back through the browser
 
-### Python
-- FastAPI
-- Google's ADK and GenAI libraries
-- Quart (legacy)
-- gTTS (for audio synthesis)
-- sqlite3
-- python-dotenv
+### Available Tools
+The assistant can provide information on:
+- Sales specials and promotions
+- Service specials and offers
+- EV purchase incentives
+- Electric vehicle inventory
+- Gas vehicle inventory
+- Service department information
 
-### JavaScript
-- Web Audio API
-- EventEmitter3
-- Material Symbols (for UI icons)
+## Configuration
 
-## Contributing
+- **Model**: Configured to use `gemini-2.0-flash-live-001`
+- **Audio Format**: PCM audio at 16kHz
+- **Web Scraping**: Targets specific pages on stevenscreekchevy.com
+- **Session Timeout**: Automatic cleanup on WebSocket disconnect
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+## Development
 
-## License
+### Project Structure
+```
+app/
+├── main.py                 # FastAPI server
+├── requirements.txt        # Python dependencies
+├── .env                    # Environment variables
+├── voice_agent/
+│   ├── agent.py           # Agent definition
+│   ├── prompt.py          # System prompt
+│   └── tools/
+│       ├── tools.py       # Scraping tools
+│       └── utils.py       # Helper functions
+└── static/
+    ├── index.html         # Web interface
+    └── js/
+        ├── app.js         # Main client script
+        ├── audio-player.js # Audio playback worklet
+        └── audio-recorder.js # Audio recording worklet
+```
 
-This project is for educational/demonstration purposes. Please check with the original authors for licensing information.
+### Adding New Tools
+1. Define the tool function in `tools/tools.py`
+2. Decorate with `@function_tool`
+3. Add to the agent's tools list in `agent.py`
+4. Update the system prompt in `prompt.py`
+
+### Customizing the Assistant
+- Modify the system prompt in `prompt.py` to change behavior
+- Update scraping URLs in `tools/tools.py` for different dealerships
+- Adjust audio parameters in the client JavaScript
 
 ## Troubleshooting
 
-- **Connection Issues**: Ensure the server is running and ports are not blocked.
-- **Audio Problems**: Check browser permissions for microphone access.
-- **API Errors**: Verify your Google API key and quotas.
-- **Database Errors**: Ensure `retrieval_data.db` exists and is populated.
+- **WebSocket Connection Issues**: Check that the server is running on port 8000
+- **Audio Not Working**: Ensure microphone permissions are granted in browser
+- **Tool Errors**: Verify internet connection for web scraping
+- **API Errors**: Confirm Google API key is valid and has proper permissions
 
-For more help, refer to the code comments or open an issue.
-Note: The code is customised verison of Audio Bidirectional streaming in google ADK documentation: https://google.github.io/adk-docs/streaming/custom-streaming-ws/#next-steps-for-production
+## License
 
-
-
+Copyright 2025 Google LLC. Licensed under the Apache License, Version 2.0.
