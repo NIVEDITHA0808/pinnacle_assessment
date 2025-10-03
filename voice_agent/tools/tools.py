@@ -82,6 +82,7 @@ async def fetch_with_cache(url: str):
     or within TTL, else scrapes again and saves to cache
     """
     cached = get_from_cache(url)
+    print(f"Cache hit for {url}: {bool(cached)}")
     if cached:
         return cached, True
     content, status = await scrape_site_to_md(url)
