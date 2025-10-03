@@ -163,9 +163,8 @@ app/
 
 ### Adding New Tools
 1. Define the tool function in `tools/tools.py`
-2. Decorate with `@function_tool`
-3. Add to the agent's tools list in `agent.py`
-4. Update the system prompt in `prompt.py`
+2. Add to the agent's tools list in `agent.py`
+3. Update the system prompt in `prompt.py`
 
 ### Customizing the Assistant
 - Modify the system prompt in `prompt.py` to change behavior
@@ -182,6 +181,7 @@ app/
 ## License
 
 Copyright 2025 Google LLC. Licensed under the Apache License, Version 2.0.
+
 
 
 
