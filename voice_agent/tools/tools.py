@@ -1,14 +1,18 @@
-"""Tools for scraping content from website"""
-import requests
-from bs4 import BeautifulSoup
+"""Tools for scraping content from dealership site"""
+
 import asyncio 
+import requests
 import functools
+from bs4 import BeautifulSoup
+from .utils import get_from_cache, add_to_cache
 from concurrent.futures import ThreadPoolExecutor
-from .utils import function_tool
+
 
 HEADERS_TO_IGNORE = {"chevrolet of stevens creek", "contact us", "more info", "no results"}
 
 BASE_URL = "https://www.stevenscreekchevy.com/"
+
+# TODO: These might change, but should ideally fetch from sitemap
 SALES_SPECIALS_PATH = "newspecials.html"
 SERVICE_SPECIALS_PATH = "service-parts-specials.html"
 SERVICE_REQUEST_PATH = "service-department-san-jose-ca"
@@ -38,6 +42,9 @@ async def scrape_site_to_md(url: str):
             # Skip empty and unwanted tags
             if not tag_text or tag_text.lower() in HEADERS_TO_IGNORE:
                 continue
+            
+            # This is special char that's coming up when scraping
+            # Includes contact info, so ignoring for now
             if tag_text == "×":
                 break
             
@@ -56,7 +63,12 @@ async def scrape_site_to_md(url: str):
                 md_lines.append(f"### {tag_text}")
             elif tag.name == 'h4':
                 md_lines.append(f"#### {tag_text}")
+            
+            # span includes some contact info for sales, service
+            # we'll ignore for now, but it might contain info in some pages 
             elif tag.name in ['p', 'span']:
+                # to avoid giant blocks of text, we can represent paragraphs as - list
+                # md_lines.append(f"- [{tag.name.lower()}]{tag_text}") # for debugging
                 md_lines.append(f"- {tag_text}")
         
         markdown_content = "\n".join(md_lines).strip()
@@ -69,63 +81,81 @@ async def fetch_with_cache(url: str):
     Fetches site content from cache if available
     or within TTL, else scrapes again and saves to cache
     """
+    cached = get_from_cache(url)
+    if cached:
+        return cached, True
     content, status = await scrape_site_to_md(url)
+    if status:
+        add_to_cache(url, content)
     return content, status
 
 
-# @function_tool
 async def get_sales_specials():
     """Get special or promotionals sales from the website"""
+
     url_to_scrape = BASE_URL + SALES_SPECIALS_PATH
+
     scrape_content, status = await fetch_with_cache(url=url_to_scrape)
+
     if not status:
         return "Unable to get information at this moment. Please try again later"
     return scrape_content
 
 
-@function_tool
 async def get_service_specials():
     """Get specials or offers on services and parts"""
+
     url_to_scrape = BASE_URL + SERVICE_SPECIALS_PATH
+
     scrape_content, status = await fetch_with_cache(url=url_to_scrape)
+
     if not status:
         return "Unable to get information at this moment. Please try again later"
     return scrape_content
 
 
-@function_tool
 async def get_service_content():
     """Get info on services offered and steps to request service appointments"""
+
     url_to_scrape = BASE_URL + SERVICE_REQUEST_PATH
+
     scrape_content, status = await fetch_with_cache(url=url_to_scrape)
+
     if not status:
         return "Unable to get information at this moment. Please try again later"
     return scrape_content
 
 
-@function_tool
 async def get_ev_incentives():
     """Get info on incentives offered for EV purchase"""
+
     url_to_scrape = BASE_URL + EV_INCENTIVES_PATH
+
     scrape_content, status = await fetch_with_cache(url=url_to_scrape)
+
     if not status:
         return "Unable to get information at this moment. Please try again later"
     return scrape_content
 
-@function_tool
+
 async def get_vehicle_inventory_electric():
     """Get inventory info for electric vehicles"""
+
     url_to_scrape = BASE_URL + EV_INVENTORY_PATH
+    
     scrape_content, status = await fetch_with_cache(url=url_to_scrape)
+
     if not status:
         return "Unable to get information at this moment. Please try again later"
     return scrape_content
 
-@function_tool
 async def get_vehicle_inventory_gas():
     """Get inventory info for gas vehicles"""
+
     url_to_scrape = BASE_URL + GAS_INVENTORY_PATH
+    
     scrape_content, status = await fetch_with_cache(url=url_to_scrape)
+
     if not status:
         return "Unable to get information at this moment. Please try again later"
     return scrape_content
