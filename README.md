@@ -76,7 +76,7 @@ This application demonstrates a conversational AI assistant that can handle both
                                  │
                                  ▼
                             🔊 Speakers
-```
+  ```
 ## Prerequisites
 
 - Python 3.11+
