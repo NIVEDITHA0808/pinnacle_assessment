@@ -60,7 +60,8 @@ This application demonstrates a conversational AI assistant that can handle both
               │     - SYSTEM_PROMPT               │
               │     - Tools (get_sales_specials,  │
               │       get_service_content, etc.)  │
-              │  3. Agent generates response      |
+              │  3. Agent generates text response |
+              |  4. Text-to-Speech (TTS)          |
               └───────────────────────────────────┘
                                  │
                  Agent response PCM (Int16)
@@ -181,6 +182,7 @@ app/
 ## License
 
 Copyright 2025 Google LLC. Licensed under the Apache License, Version 2.0.
+
 
 
 
